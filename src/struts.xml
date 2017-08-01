@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+		"http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+   <constant name="struts.devMode" value="true" />
+   <constant name="struts.convention.result.path" value="/WEB-INF/pages/" />
+   <package name="ostomia" extends="struts-default">
+   
+        <interceptors>
+            <interceptor name="loginInterceptor" class="meg.ostomia.struts.interceptor.LoginInterceptor" />	
+            <interceptor-stack name="loginStack">
+                <interceptor-ref name="loginInterceptor"/>
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="loginStack"/>
+        
+		
+		<global-results>
+			<result name="login">/WEB-INF/pages/login.jsp</result>
+			<result name="error">/WEB-INF/pages/error.jsp</result>
+		</global-results>
+        
+		<action name="login" 
+				class="meg.ostomia.struts.action.LoginAction" 
+	            method="login">
+	        <interceptor-ref name="defaultStack"/>
+			<result name="success" type="chain">cargarDatos</result>
+		</action>
+        
+		<action name="logout" 
+				class="meg.ostomia.struts.action.LoginAction" 
+	            method="logout">
+	        <interceptor-ref name="defaultStack"/>
+			<result name="success">/WEB-INF/pages/login.jsp</result>
+		</action>
+		<action name="cargarDatos" 
+				class="meg.ostomia.struts.action.CargarDatosAction" 
+	            method="execute">
+	        <interceptor-ref name="loginStack"/>
+			<result name="success">/WEB-INF/pages/index.jsp</result>
+		</action>
+		
+   </package>
+
+</struts>
